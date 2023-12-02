@@ -1,0 +1,27 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "james10354.jamesmod.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "WorldRendererMixin",
+        "ExplosionFireMixin",
+        "EntityMixin",
+        "EntityLivingMixin",
+        "EntityPlayerMixin",
+        "EntityPathfinderMixin",
+        "EntityMonsterMixin",
+        "HarderCreepersMixin",
+        "HarderZombiesMixin",
+        "HarderSkeletonsMixin"
+    ],
+    "client": [
+        "GameSettingsMixin",
+        "GuiOptionsPageControlsMixin"
+    ],
+    "server": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
