@@ -1,28 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "jamesmod",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "James' Mod",
+  "description": "A mod by James.",
   "authors": [
-    "Turnip Labs"
+    "James10354"
   ],
   "contact": {
     "homepage": "",
     "sources": ""
   },
 
-  "license": "CC0-1.0",
+  "_license": "",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-        "turniplabs.examplemod.ExampleMod"
+      "james10354.jamesmod.JamesMod"
     ]
   },
   "mixins": [
-      "examplemod.mixins.json"
+      "jamesmod.mixins.json"
   ],
 
   "depends": {
