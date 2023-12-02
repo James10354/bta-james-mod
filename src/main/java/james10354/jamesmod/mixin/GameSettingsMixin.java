@@ -1,6 +1,7 @@
 package james10354.jamesmod.mixin;
 
 import com.b100.utils.ReflectUtils;
+import james10354.jamesmod.util.IGameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.option.GameSettings;
 import net.minecraft.client.option.KeyBinding;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.File;
 
 @Mixin(GameSettings.class)
-public abstract class GameSettingsMixin {
+public abstract class GameSettingsMixin implements IGameSettings {
 
     @Shadow public KeyBinding[] keys;
 
@@ -23,6 +24,9 @@ public abstract class GameSettingsMixin {
     @Shadow public abstract void saveOptions();
 
     @Unique public KeyBinding keySprint;
+
+    @Override
+    public KeyBinding getKeySprint() { return this.keySprint; }
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void extraSettings(Minecraft minecraft, File file, CallbackInfo ci) {
