@@ -18,7 +18,9 @@
     "client": [
         "GameSettingsMixin",
         "GuiOptionsPageControlsMixin",
-        "GuiOptionsPageBaseMixin"
+        "GuiOptionsPageBaseMixin",
+        "InputMixin",
+        "KeyboardInputMixin"
     ],
     "server": [
     ],
