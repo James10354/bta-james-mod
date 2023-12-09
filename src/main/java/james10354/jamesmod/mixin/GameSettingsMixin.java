@@ -3,6 +3,7 @@ package james10354.jamesmod.mixin;
 import com.b100.utils.ReflectUtils;
 import james10354.jamesmod.util.IGameSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.option.BooleanOption;
 import net.minecraft.client.option.GameSettings;
 import net.minecraft.client.option.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +26,11 @@ public abstract class GameSettingsMixin implements IGameSettings {
 
     @Unique public KeyBinding keySprint;
 
+    @Unique public BooleanOption dynamicFoV;
+
+    @Override
+    public BooleanOption getDynamicFoV() { return this.dynamicFoV; }
+
     @Override
     public KeyBinding getKeySprint() { return this.keySprint; }
 
@@ -32,6 +38,9 @@ public abstract class GameSettingsMixin implements IGameSettings {
     private void extraSettings(Minecraft minecraft, File file, CallbackInfo ci) {
         this.keySprint = new KeyBinding("key.keySprint", 29);
         this.keys = (KeyBinding[]) ReflectUtils.getAllObjects(GameSettings.class, KeyBinding.class, ((GameSettings)(Object)this));
+
+        this.dynamicFoV = new BooleanOption(((GameSettings)(Object)this), "dynamicFoV", true);
+
         this.loadOptions();
         this.saveOptions();
     }

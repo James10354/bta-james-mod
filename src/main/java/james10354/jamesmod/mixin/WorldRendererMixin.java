@@ -1,6 +1,8 @@
 package james10354.jamesmod.mixin;
 
 import james10354.jamesmod.util.IEntityLiving;
+import james10354.jamesmod.util.IGameSettings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.camera.EntityCamera;
 import net.minecraft.client.render.camera.ICamera;
@@ -8,6 +10,7 @@ import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.util.helper.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
+    @Shadow protected Minecraft mc;
     @Unique protected float currentFovMultiplier;
     @Unique protected float startFovMultiplier;
     @Unique protected float targetFovMultiplier;
@@ -22,6 +26,9 @@ public abstract class WorldRendererMixin {
 
     @Redirect(method = "getFOVModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/camera/ICamera;getFov()D"), remap = false)
     private double dynamicFOV(ICamera activeCamera) {
+        if (!((IGameSettings)this.mc.gameSettings).getDynamicFoV().value) {
+            return activeCamera.getFov();
+        }
 
         if (fovBlendTimer < 1.0F) {
             fovBlendTimer *= 1.5F;
@@ -33,14 +40,15 @@ public abstract class WorldRendererMixin {
             }
         }
 
-        if (targetFovMultiplier != ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeed() / 2.0F) {
-            fovBlendTimer = 0.1F;
+        float strength = 0.2F;
+        if (targetFovMultiplier != ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() * strength) {
+            fovBlendTimer = 0.01F;
             startFovMultiplier = currentFovMultiplier;
-            targetFovMultiplier = ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeed() / 2.0F;
+            targetFovMultiplier = ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() * strength;
         }
 
         currentFovMultiplier = MathHelper.lerp(startFovMultiplier, targetFovMultiplier, fovBlendTimer);
 
-        return activeCamera.getFov() * (currentFovMultiplier + 0.5F);
+        return activeCamera.getFov() * (currentFovMultiplier + (1-strength));
     }
 }

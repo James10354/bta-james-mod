@@ -1,6 +1,10 @@
 package james10354.jamesmod.mixin;
 
 import james10354.jamesmod.util.IGameSettings;
+import james10354.jamesmod.util.IInput;
+import net.minecraft.client.input.Input;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.util.helper.MathHelper;
 import org.checkerframework.common.value.qual.IntVal;
 import org.objectweb.asm.Opcodes;
 import net.minecraft.client.input.KeyboardInput;
@@ -28,7 +32,6 @@ public abstract class KeyboardInputMixin implements IGameSettings {
         }
 
         if (inputIndex >= 0) {
-            System.out.println(inputIndex);
             this.keys[inputIndex] = isPressed;
         }
         ci.cancel();
@@ -37,5 +40,20 @@ public abstract class KeyboardInputMixin implements IGameSettings {
     @ModifyConstant(method = "releaseAllKeys", constant = @Constant(intValue = 11), remap = false)
     private int newKeyCount(int constant) {
         return this.keys.length;
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"), remap = false)
+    private void doSprint(EntityPlayer entityplayer, CallbackInfo ci) {
+
+        ((IInput)this).setSprint(true);
+
+        if (!this.keys[11]) {
+            ((IInput)this).setSprint(false);
+        }
+
+//        if (!((Input)(Object)this).sneak && ((IInput)this).getSprint() && ((Input)(Object)this).moveForward >= MathHelper.abs(((Input)(Object)this).moveStrafe)) {
+//            ((Input)(Object)this).moveStrafe = (float)((double)((Input)(Object)this).moveStrafe * 1.2);
+//            ((Input)(Object)this).moveForward = (float)((double)((Input)(Object)this).moveForward * 1.5);
+//        }
     }
 }

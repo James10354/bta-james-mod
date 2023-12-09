@@ -2,14 +2,11 @@ package james10354.jamesmod.mixin;
 
 import james10354.jamesmod.util.IEntity;
 import net.minecraft.core.entity.Entity;
-import net.minecraft.core.world.World;
+import net.minecraft.core.util.helper.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
@@ -37,4 +34,5 @@ public abstract class EntityMixin implements IEntity {
 
     @Redirect(method = "baseTick", at = @At(value = "FIELD", target = "Lnet/minecraft/core/entity/Entity;fallDistance:F"), remap = false)
     private void keepFallDistance(Entity instance, float value) { }
+
 }

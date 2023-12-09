@@ -19,6 +19,8 @@ public abstract class EntityPlayerMixin implements IEntityLiving {
     @Unique protected float attackStrength = 1.0F;
     @Unique protected int deathSaveTimer = 0;
 
+    @Unique protected boolean isSprinting = false;
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injected(CallbackInfo ci) {
         this.setMoveSpeed(1.0F);
@@ -30,8 +32,8 @@ public abstract class EntityPlayerMixin implements IEntityLiving {
 
         if (((EntityPlayer)(Object)this).health < 1 && ((EntityPlayer)(Object)this).prevHealth != 1 && damageType == DamageType.COMBAT) {
             ((EntityPlayer)(Object)this).health = 1;
-            this.setMoveSpeed(1.4F);
-            this.attackStrength = 1.3F;
+            this.setMoveSpeed(this.getMoveSpeed() + 0.4F);
+            this.attackStrength += 0.3F;
             this.deathSaveTimer = 30;
         }
     }
@@ -42,8 +44,8 @@ public abstract class EntityPlayerMixin implements IEntityLiving {
             this.deathSaveTimer--;
         }
         if (this.deathSaveTimer == 1) {
-            this.setMoveSpeed(1.0F);
-            this.attackStrength = 1.0F;
+            this.setMoveSpeed(this.getMoveSpeed() - 0.4F);
+            this.attackStrength -= 0.3F;
         }
     }
 
@@ -55,5 +57,10 @@ public abstract class EntityPlayerMixin implements IEntityLiving {
     @Redirect(method = "attackTargetEntityWithCurrentItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/player/inventory/InventoryPlayer;getDamageVsEntity(Lnet/minecraft/core/entity/Entity;)I"), remap = false)
     private int useAttackStrength(InventoryPlayer inventory, Entity entity) {
         return (int)(inventory.getDamageVsEntity(entity) * this.attackStrength);
+    }
+
+    @Inject(method = "moveEntityWithHeading", at = @At("HEAD"), remap = false)
+    private void injected(float moveStrafing, float moveForward, CallbackInfo ci) {
+        //System.out.println(moveForward);
     }
 }

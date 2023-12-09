@@ -22,7 +22,7 @@ public abstract class GuiOptionsPageControlsMixin implements IGuiOptionsPageBase
                     ordinal = 0),
             index = 1)
     private KeyBinding[] addKeyBind(KeyBinding[] bindings) {
-        KeyBinding[] newBindings = new KeyBinding[bindings.length+1];
+        KeyBinding[] newBindings = new KeyBinding[bindings.length + 1];
         for (int i = 0; i < bindings.length; i++) {
             newBindings[i] = bindings[i];
         }

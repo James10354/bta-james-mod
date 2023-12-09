@@ -8,6 +8,7 @@ import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
 
     @Shadow protected float moveSpeed;
+    @Unique protected float moveSpeedMultiplier = 1.0F;
 
     public EntityLivingMixin(World world) {
         super(world);
@@ -27,6 +29,10 @@ public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
     public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
     }
+
+    public float getMoveSpeedMultiplier() { return this.moveSpeedMultiplier; }
+
+    public void setMoveSpeedMultiplier(float multiplier) { this.moveSpeedMultiplier = multiplier; }
 
     @Inject(method = "knockBack", at = @At(value = "FIELD", target = "Lnet/minecraft/core/entity/EntityLiving;xd:D", ordinal = 1), cancellable = true, remap = false)
     private void cancelLimitVelY(Entity entity, int i, double d, double d1, CallbackInfo ci) {
@@ -58,6 +64,6 @@ public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
 
     @ModifyArg(method = "moveEntityWithHeading", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/EntityLiving;moveRelative(FFF)V"), index = 2, remap = false)
     private float useMoveSpeed(float multiplier) {
-        return this.moveSpeed * multiplier;
+        return this.moveSpeed * this.moveSpeedMultiplier * multiplier;
     }
 }
