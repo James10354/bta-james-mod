@@ -21,11 +21,11 @@ import static net.minecraft.core.util.helper.MathHelper.PI;
 
 
 @Mixin(EntityCreeper.class)
-public abstract class HarderCreepersMixin extends EntityPathfinder implements IEntityPathfinder, IEntity {
+public abstract class EntityCreeperMixin extends EntityPathfinder implements IEntityPathfinder, IEntity {
     @Shadow public abstract boolean getPowered();
     @Shadow protected abstract void attackEntity(Entity entity, float distance);
 
-    public HarderCreepersMixin(World world) { super(world); }
+    public EntityCreeperMixin(World world) { super(world); }
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injected(CallbackInfo ci) {
@@ -38,8 +38,8 @@ public abstract class HarderCreepersMixin extends EntityPathfinder implements IE
     }
 
     @Redirect(method = "attackEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/world/World;createExplosion(Lnet/minecraft/core/entity/Entity;DDDF)Lnet/minecraft/core/world/Explosion;"), remap = false)
-    public Explosion doExplosion(World worldObj, Entity entity, double d, double d1, double d2, float f) {
-        return worldObj.newExplosion(entity, d, d1, d2, f, getSharedFlag(0), false);
+    public Explosion doExplosion(World world, Entity entity, double d, double d1, double d2, float f) {
+        return world.newExplosion(entity, d, d1, d2, f, getSharedFlag(0), false);
     }
 
     @Inject(method = "tick", at = @At("HEAD"), remap = false)

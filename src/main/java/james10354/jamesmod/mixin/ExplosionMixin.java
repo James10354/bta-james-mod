@@ -1,5 +1,7 @@
 package james10354.jamesmod.mixin;
 
+import james10354.jamesmod.util.IBlock;
+import net.minecraft.core.block.Block;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.util.phys.Vec3d;
 import net.minecraft.core.world.Explosion;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @Mixin(Explosion.class)
-public abstract class ExplosionFireMixin {
+public abstract class ExplosionMixin {
     @Shadow private boolean destroyBlocks;
     @Shadow private boolean isFlaming;
     @Shadow public Set<ChunkPosition> destroyedBlockPositions;
@@ -34,6 +36,11 @@ public abstract class ExplosionFireMixin {
         if (this.destroyBlocks && this.isFlaming) {
             this.createFire();
         }
+    }
+
+    @Redirect(method = "doExplosionB", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;onBlockDestroyedByExplosion(Lnet/minecraft/core/world/World;III)V"), remap = false)
+    private void destroyedByExplosion(Block block, World world, int x, int y, int z) {
+        ((IBlock)block).onBlockDestroyedByExplosion(world, x, y, z, this.isFlaming);
     }
 
     @Inject(method = "calculateBlocksToDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/world/chunk/ChunkPosition;<init>(III)V"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)

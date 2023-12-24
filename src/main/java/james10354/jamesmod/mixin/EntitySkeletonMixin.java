@@ -6,18 +6,14 @@ import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.monster.EntitySkeleton;
 import net.minecraft.core.entity.projectile.EntityArrow;
 import net.minecraft.core.util.helper.MathHelper;
-import net.minecraft.core.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Random;
-
 @Mixin(EntitySkeleton.class)
-public abstract class HarderSkeletonsMixin implements IEntityPathfinder {
+public abstract class EntitySkeletonMixin implements IEntityPathfinder {
 
     @Unique protected float maxRange = 16.0F;
     @Unique protected int minDrawTime = 10;

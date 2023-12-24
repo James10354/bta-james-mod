@@ -5,16 +5,19 @@
     "compatibilityLevel": "JAVA_8",
     "mixins": [
         "WorldRendererMixin",
-        "ExplosionFireMixin",
+        "ExplosionMixin",
+        "BlockMixin",
+        "BlockTNTMixin",
         "EntityMixin",
+        "EntityTNTMixin",
         "EntityLivingMixin",
         "EntityPlayerSPMixin",
         "EntityPlayerMixin",
         "EntityPathfinderMixin",
         "EntityMonsterMixin",
-        "HarderCreepersMixin",
-        "HarderZombiesMixin",
-        "HarderSkeletonsMixin"
+        "EntityCreeperMixin",
+        "EntityZombieMixin",
+        "EntitySkeletonMixin"
     ],
     "client": [
         "GameSettingsMixin",

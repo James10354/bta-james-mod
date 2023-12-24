@@ -34,12 +34,12 @@ public abstract class EntityPlayerSPMixin {
             moveForward /= mag;
             moveStrafe /= mag;
 
-            if (moveForward < 0) moveForward *= 0.4F;
-            moveStrafe *= 0.6F;
+            if (moveForward < 0) moveForward *= 0.2F;
+            moveStrafe *= 0.5F;
 
             mag = MathHelper.sqrt_float(moveForward * moveForward + moveStrafe * moveStrafe);
 
-            this.sprintBoost = mag * 0.3F;
+            this.sprintBoost = mag * 0.5F;
 
             ((IEntityLiving)this).setMoveSpeedMultiplier(((IEntityLiving)this).getMoveSpeedMultiplier() + sprintBoost);
         }
