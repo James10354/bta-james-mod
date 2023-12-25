@@ -14,22 +14,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityPlayerSP.class)
 public abstract class EntityPlayerSPMixin {
 
-    @Unique protected boolean isSprinting = false;
-    @Unique protected float sprintBoost = 0.0F;
-
     @Inject(method = "onLivingUpdate", at = @At("HEAD"), remap = false)
     private void doSprint(CallbackInfo ci) {
-        if (this.isSprinting) {
-            this.isSprinting = false;
-            ((IEntityLiving)this).setMoveSpeedMultiplier(((IEntityLiving)this).getMoveSpeedMultiplier() - sprintBoost);
-        }
-        if (!(((EntityPlayerSP)(Object)this).input).sneak && ((IInput)((EntityPlayerSP)(Object)this).input).getSprint() && ((((EntityPlayerSP)(Object)this).input).moveForward != 0 || (((EntityPlayerSP)(Object)this).input).moveStrafe != 0)) {
-            this.isSprinting = true;
 
+        ((IEntityLiving)this).setSprintBoost(0.0F);
+
+        if (!(((EntityPlayerSP)(Object)this).input).sneak && ((IInput)((EntityPlayerSP)(Object)this).input).getSprint() && ((((EntityPlayerSP)(Object)this).input).moveForward != 0 || (((EntityPlayerSP)(Object)this).input).moveStrafe != 0)) {
+            ((IEntityLiving)this).setSprinting(true);
+        }
+
+        if (((IEntityLiving)this).isSprinting() && (((EntityPlayerSP)(Object)this).health < 14 || (MathHelper.abs((float)((EntityPlayerSP)(Object)this).xd) < 0.05F && MathHelper.abs((float)((EntityPlayerSP)(Object)this).zd) < 0.05F))) {
+            ((IEntityLiving) this).setSprinting(false);
+        }
+
+        if (((IEntityLiving)this).isSprinting()) {
             float moveForward = (((EntityPlayerSP)(Object)this).input).moveForward;
             float moveStrafe = (((EntityPlayerSP)(Object)this).input).moveStrafe;
 
-            float mag = MathHelper.sqrt_float(moveForward * moveForward + moveStrafe * moveStrafe);
+            float mag = MathHelper.sqrt_float(moveForward * moveForward + moveStrafe * moveStrafe) + Float.MIN_VALUE;
 
             moveForward /= mag;
             moveStrafe /= mag;
@@ -39,9 +41,9 @@ public abstract class EntityPlayerSPMixin {
 
             mag = MathHelper.sqrt_float(moveForward * moveForward + moveStrafe * moveStrafe);
 
-            this.sprintBoost = mag * 0.5F;
+            ((IEntityLiving)this).setSprintBoost(mag * 0.5F);
 
-            ((IEntityLiving)this).setMoveSpeedMultiplier(((IEntityLiving)this).getMoveSpeedMultiplier() + sprintBoost);
+            //((IEntityLiving)this).setMoveSpeedMultiplier(((IEntityLiving)this).getMoveSpeedMultiplier() + ((IEntityLiving)this).getSprintBoost());
         }
     }
 }

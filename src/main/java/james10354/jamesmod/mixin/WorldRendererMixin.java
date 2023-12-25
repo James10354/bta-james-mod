@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
-    @Shadow protected Minecraft mc;
+    @Shadow private Minecraft mc;
     @Unique protected float currentFovMultiplier;
     @Unique protected float startFovMultiplier;
     @Unique protected float targetFovMultiplier;
@@ -41,10 +41,10 @@ public abstract class WorldRendererMixin {
         }
 
         float strength = 0.2F;
-        if (targetFovMultiplier != ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() * strength) {
+        if (targetFovMultiplier != (((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() + (((IEntityLiving)((EntityCamera)activeCamera).entity).isSprinting() ? 0.5F : 0)) * strength) {
             fovBlendTimer = 0.01F;
             startFovMultiplier = currentFovMultiplier;
-            targetFovMultiplier = ((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() * strength;
+            targetFovMultiplier = (((IEntityLiving)((EntityCamera)activeCamera).entity).getMoveSpeedMultiplier() + (((IEntityLiving)((EntityCamera)activeCamera).entity).isSprinting() ? 0.5F : 0)) * strength;
         }
 
         currentFovMultiplier = MathHelper.lerp(startFovMultiplier, targetFovMultiplier, fovBlendTimer);

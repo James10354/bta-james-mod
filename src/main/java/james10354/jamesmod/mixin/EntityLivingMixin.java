@@ -15,7 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityLiving.class)
 public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
 
+
+
     @Shadow protected float moveSpeed;
+
+    @Unique protected boolean isSprinting = false;
+    @Unique protected float sprintBoost = 0.0F;
+
     @Unique protected float moveSpeedMultiplier = 1.0F;
 
     public EntityLivingMixin(World world) {
@@ -28,6 +34,22 @@ public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
 
     public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public boolean isSprinting() {
+        return this.isSprinting;
+    }
+
+    public void setSprinting(boolean isSprinting) {
+        this.isSprinting = isSprinting;
+    }
+
+    public float getSprintBoost() {
+        return this.sprintBoost;
+    }
+
+    public void setSprintBoost(float sprintBoost) {
+        this.sprintBoost = sprintBoost;
     }
 
     public float getMoveSpeedMultiplier() { return this.moveSpeedMultiplier; }
@@ -64,6 +86,6 @@ public abstract class EntityLivingMixin extends Entity implements IEntityLiving{
 
     @ModifyArg(method = "moveEntityWithHeading", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/EntityLiving;moveRelative(FFF)V"), index = 2, remap = false)
     private float useMoveSpeed(float multiplier) {
-        return this.moveSpeed * this.moveSpeedMultiplier * multiplier;
+        return this.moveSpeed * (this.moveSpeedMultiplier + this.sprintBoost) * multiplier;
     }
 }

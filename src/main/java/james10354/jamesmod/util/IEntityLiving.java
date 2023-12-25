@@ -7,4 +7,10 @@ public interface IEntityLiving {
 
     float getMoveSpeedMultiplier();
     void setMoveSpeedMultiplier(float multiplier);
+
+    boolean isSprinting();
+    void setSprinting(boolean isSprinting);
+
+    float getSprintBoost();
+    void setSprintBoost(float sprintBoost);
 }
