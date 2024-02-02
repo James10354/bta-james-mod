@@ -19,11 +19,11 @@ public abstract class EntityPlayerSPMixin {
 
         ((IEntityLiving)this).setSprintBoost(0.0F);
 
-        if (!(((EntityPlayerSP)(Object)this).input).sneak && ((IInput)((EntityPlayerSP)(Object)this).input).getSprint() && ((((EntityPlayerSP)(Object)this).input).moveForward != 0 || (((EntityPlayerSP)(Object)this).input).moveStrafe != 0)) {
+        if (((IInput)((EntityPlayerSP)(Object)this).input).getSprint() && ((((EntityPlayerSP)(Object)this).input).moveForward != 0 || (((EntityPlayerSP)(Object)this).input).moveStrafe != 0)) {
             ((IEntityLiving)this).setSprinting(true);
         }
 
-        if (((IEntityLiving)this).isSprinting() && (((EntityPlayerSP)(Object)this).health < 14 || (MathHelper.abs((float)((EntityPlayerSP)(Object)this).xd) < 0.05F && MathHelper.abs((float)((EntityPlayerSP)(Object)this).zd) < 0.05F))) {
+        if (((IEntityLiving)this).isSprinting() && (((EntityPlayerSP)(Object)this).health < 14 || (((EntityPlayerSP)(Object)this).input).sneak || ((((EntityPlayerSP)(Object)this).input).moveForward == 0.0F && (((EntityPlayerSP)(Object)this).input).moveStrafe == 0.0F) || (MathHelper.abs((float)((EntityPlayerSP)(Object)this).xd) < 0.05F && MathHelper.abs((float)((EntityPlayerSP)(Object)this).zd) < 0.05F))) {
             ((IEntityLiving) this).setSprinting(false);
         }
 
