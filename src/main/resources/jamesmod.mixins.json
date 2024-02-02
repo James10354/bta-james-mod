@@ -17,7 +17,8 @@
         "EntityMonsterMixin",
         "EntityCreeperMixin",
         "EntityZombieMixin",
-        "EntitySkeletonMixin"
+        "EntitySkeletonMixin",
+        "EntitySlimeMixin"
     ],
     "client": [
         "GameSettingsMixin",
