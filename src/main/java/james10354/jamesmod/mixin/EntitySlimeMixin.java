@@ -35,7 +35,7 @@ public abstract class EntitySlimeMixin extends Entity {
             this.isStuck = false;
         }
 
-        if (((EntitySlime)(Object)this).distanceTo(entityplayer) < 0.8 * this.getSlimeSize() && random.nextInt(8) == 0) {
+        if (this.distanceTo(entityplayer) < 0.8 * this.getSlimeSize() && random.nextInt(8) == 0) {
             this.isStuck = true;
         }
 
